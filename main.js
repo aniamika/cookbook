@@ -1,46 +1,82 @@
+// let {RandomPictureGenerator} = require('./RandomPictureGenerator')
+// import {Picture} from './Picture.js';
 
-class CookBook {
 
-}
-
-class Recipe {
-    constructor(title, components, description) {
+class Picture {
+    constructor(title, description, url) {
         this.title = title;
-        this.components = components;
         this.description = description;
-    }
-    // dlaczego nie może byc na odwrot?:
-    // title = this.title;
-    // components = this.components;
-    // this.description = description;
-    title = '';
-    components = [];
-    description = '';
-    addRecipe() {
-        console.log("add recipe");
-    };
-    modifyRecipe() {
-        console.log("modify recipe");
-    };
-    removeRecipe() {
-        console.log("remove recipe");
+        this.url = url;
     }
 }
 
-function createNewRecipe() {
-    // create new recipe
-    let cake = new Recipe('Ciasto marchewkowe', 'marchewka', 'Piec godzine.'); 
-    // <- dlaczego tu jest () skoro klasa recipe nie ma (). To jest to funkcja czy nie??
-    // slowo new odpala construktor
-    console.log(cake);
+class RandomPictureGenerator {
+    pictures = [];
+    addPicture(newPicture) {
+        this.pictures.push(newPicture)
+    };
+    getRandomPicture(randomNumberGenerator) {
+        const randomIndex = randomNumberGenerator(0, this.pictures.length-1);
+        const randomPicture = this.pictures[randomIndex];
+        return randomPicture;
+    };
+    getPictureByTitle() {
 
-    let recipe = document.createElement('h2');
-    recipe.classList.add('recipeHeading');
-    recipe.innerHTML = cake.title;
-    // document.body.appendChild(recipe); 
+    };
+} 
+
+function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
-createNewRecipe();
 
-let cookBook = document.getElementsByClassName('cookBook');
-console.log(cookBook);
-// cookBook.appendChild(recipe);
+window.onload = function() {
+
+
+
+    let picturesList = new RandomPictureGenerator();
+
+
+    let pictureZosia = new Picture (
+        'zosia', 
+        'zosia na spacerze z mama', 
+        'https://bi.im-g.pl/im/a5/a8/18/z25857701IH,Czy-mozna-wyjsc-z-dzieckiem-na-spacer-.jpg'
+    )
+    let pictureLandscape = new Picture (
+        'landscape', 
+        'landscape in Poland', 
+        'https://discovercracow.com/sites/all/pliki/styles/colorbox_obraz_powiekszony/public/obrazy_tekst/mountains-2532800_1920.jpg?itok=KLE6zJML'
+    )
+    let pictureAnimal = new Picture (
+        'monkey', 
+        'monkey in the ZOO', 
+        'https://s28164.pcdn.co/files/Patas-Monkey-0076-1280x720.jpg'
+    )
+
+    picturesList.addPicture(pictureZosia);
+    picturesList.addPicture(pictureLandscape);
+    picturesList.addPicture(pictureAnimal);
+
+    // button on click
+    const generateButton = document.querySelector(".generateButton");
+    
+    const imagesContainer = document.querySelector(".imagesContainer");
+    const singleImageContainer = document.createElement("li");
+    singleImageContainer.classList.add("singleImageContainer");
+    imagesContainer.appendChild(singleImageContainer);
+    const image = document.createElement("img");
+    image.classList.add("image");
+    image.id = 'image';
+    singleImageContainer.appendChild(image);
+
+    generateButton.addEventListener("click", function() {
+        const picture = document.getElementById("image");
+        picture.src = picturesList.getRandomPicture(getRandomInt).url;
+    });
+
+
+
+
+
+};
